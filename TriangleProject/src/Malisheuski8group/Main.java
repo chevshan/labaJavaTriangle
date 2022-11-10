@@ -1,14 +1,16 @@
 package Malisheuski8group;
 
+import org.w3c.dom.ls.LSOutput;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
 
-    public static int countEquilateral;
-    public static int countIsosceles;
-    public static int countRectangular;
-    public static int countArbitrary;
+    public static ArrayList<Triangle> triangleEquilateral = new ArrayList<>();
+    public static ArrayList<Triangle> triangleIsosceles = new ArrayList<>();
+    public static ArrayList<Triangle> triangleRectangular = new ArrayList<>();
+    public static ArrayList<Triangle> triangleArbitrary = new ArrayList<>();
 
      static Scanner scanner = new Scanner(System.in);
 
@@ -26,15 +28,28 @@ public class Main {
             System.out.println("The number cannot be zero, contain letters, or be negative. Try again.");
         }
 
-        System.out.println("Number of equilateral triangles:" + countEquilateral);
-        System.out.println("Number of isosceles triangles:" + countIsosceles);
-        System.out.println("Number of rectangular triangles:" + countRectangular);
-        System.out.println("Number of arbitrary triangles:" + countArbitrary);
+        System.out.println("Number of equilateral triangles:" + triangleEquilateral.size());
+        System.out.println("Number of isosceles triangles:" + triangleIsosceles.size());
+        System.out.println("Number of rectangular triangles:" + triangleRectangular.size());
+        System.out.println("Number of arbitrary triangles:" + triangleArbitrary.size());
+        System.out.println();
 
-        getMaxArea(triangleList);
-        getMinArea(triangleList);
-        getMaxPerimeter(triangleList);
-        getMinPerimeter(triangleList);
+        System.out.println("Data on the max/min area (perimeter) of equilateral triangles:");
+        if (triangleEquilateral.size() != 0)
+        infoTriangle(triangleEquilateral);
+        else System.out.println("There are no triangles in this group\n");
+        System.out.println("Data on the max/min area (perimeter) of isosceles triangles:");
+        if (triangleIsosceles.size() != 0)
+            infoTriangle(triangleIsosceles);
+        else System.out.println("There are no triangles in this group\n");
+        System.out.println("Data on the max/min area (perimeter) of rectangular triangles:");
+        if (triangleRectangular.size() != 0)
+            infoTriangle(triangleRectangular);
+        else System.out.println("There are no triangles in this group\n");
+        System.out.println("Data on the max/min area (perimeter) of arbitrary triangles:");
+        if (triangleArbitrary.size() != 0)
+            infoTriangle(triangleArbitrary);
+        else System.out.println("There are no triangles in this group\n");
     }
 
     public static ArrayList<Double> getTrianglesValues() {
@@ -79,81 +94,89 @@ public class Main {
             System.out.println("№" + (i + 1) + " " + triangle.toString());
             System.out.println("Perimeter = " + triangle.getPerimeter());
             System.out.println("Area = " + triangle.getArea());
-
-            int temp = triangle.typeOfTriangle();
-            switch (temp) {
-                case 1: {
-                    System.out.println("The type of triangle is equilateral");
-                    countEquilateral++;
-                    break;
-                }
-                case 2: {
-                    System.out.println("The type of triangle is isosceles");
-                    countIsosceles++;
-                    break;
-                }
-                case 3: {
-                    System.out.println("The type of triangle is rectangular");
-                    countRectangular++;
-                    break;
-                }
-                case 4: {
-                    System.out.println("The type of triangle is arbitrary");
-                    countArbitrary++;
-                    break;
-                }
-                default:
-                    System.out.println("Oh, something happened");
-            }
+            TypeOfTriangles typeOfTriangle = triangle.typeOfTriangle();
+            getTypeOfTriangle(typeOfTriangle, triangle);
             System.out.println("--------------------------------------------");
         }
     }
 
-    public static void getMaxArea(ArrayList<Triangle> triangleList) {
-        Triangle maxAreaTriangle = triangleList.get(0);
-        double maxArea = triangleList.get(0).getArea();
-        for (int i = 0; i < triangleList.size(); i++) {
-            if(maxArea < triangleList.get(i).getArea()) {
-                maxArea = triangleList.get(i).getArea();
-                maxAreaTriangle = triangleList.get(i);
+    public static void getTypeOfTriangle(TypeOfTriangles typeOfTriangle, Triangle triangle) {
+        switch (typeOfTriangle) {
+            case EQUILATERAL: {
+                System.out.println("This type of triangle is equilateral");
+                triangleEquilateral.add(triangle);
+                break;
+            }
+            case ISOSCELES: {
+                System.out.println("This type of triangle is isosceles");
+                triangleIsosceles.add(triangle);
+                break;
+            }
+            case RECTANGULAR: {
+                System.out.println("This type of triangle is rectangular");
+                triangleRectangular.add(triangle);
+                break;
+            }
+            case ARBITRARY: {
+                System.out.println("This type of triangle is arbitrary");
+                triangleArbitrary.add(triangle);
+            }
+        }
+    }
+
+    public static void getMaxArea(ArrayList<Triangle> triangleType) {
+        Triangle maxAreaTriangle = triangleType.get(0);
+        double maxArea = triangleType.get(0).getArea();
+        for (int i = 0; i < triangleType.size(); i++) {
+            if(maxArea < triangleType.get(i).getArea()) {
+                maxArea = triangleType.get(i).getArea();
+                maxAreaTriangle = triangleType.get(i);
             }
         }
         System.out.println("The largest area: " + maxArea + " of the " + maxAreaTriangle);
     }
 
-    public static void getMinArea(ArrayList<Triangle> triangleList) {
-        Triangle minAreaTriangle = triangleList.get(0);
-        double minArea = triangleList.get(0).getArea();
-        for (int i = 0; i < triangleList.size(); i++) {
-            if(minArea > triangleList.get(i).getArea()) {
-                minArea = triangleList.get(i).getArea();
-                minAreaTriangle = triangleList.get(i);
+    public static void getMinArea(ArrayList<Triangle> triangleType) {
+        Triangle minAreaTriangle = triangleType.get(0);
+        double minArea = triangleType.get(0).getArea();
+        for (int i = 0; i < triangleType.size(); i++) {
+            if(minArea > triangleType.get(i).getArea()) {
+                minArea = triangleType.get(i).getArea();
+                minAreaTriangle = triangleType.get(i);
             }
         }
         System.out.println("The smallest area: " + minArea + " of the " + minAreaTriangle);
     }
 
-    public static void getMaxPerimeter(ArrayList<Triangle> triangleList) {
-        Triangle maxPerimeterTriangle = triangleList.get(0);
-        double maxPerimeter = triangleList.get(0).getArea();
-        for (int i = 0; i < triangleList.size(); i++) {
-            if(maxPerimeter < triangleList.get(i).getArea()) {
-                maxPerimeter = triangleList.get(i).getArea();
-                maxPerimeterTriangle = triangleList.get(i);
+    public static void getMaxPerimeter(ArrayList<Triangle> triangleType) {
+        Triangle maxPerimeterTriangle = triangleType.get(0);
+        double maxPerimeter = triangleType.get(0).getArea();
+        for (int i = 0; i < triangleType.size(); i++) {
+            if(maxPerimeter < triangleType.get(i).getArea()) {
+                maxPerimeter = triangleType.get(i).getArea();
+                maxPerimeterTriangle = triangleType.get(i);
             }
         }
         System.out.println("The largest perimeter: " + maxPerimeter + " of the " + maxPerimeterTriangle);
     }
 
-    public static void getMinPerimeter(ArrayList<Triangle> triangleList) {
-        Triangle minPerimeterTriangle = triangleList.get(0);
-        double minPerimeter = triangleList.get(0).getArea();
-        for (int i = 0; i < triangleList.size(); i++) {
-            if(minPerimeter > triangleList.get(i).getArea()) {
-                minPerimeter = triangleList.get(i).getArea();
-                minPerimeterTriangle = triangleList.get(i);
+    public static void getMinPerimeter(ArrayList<Triangle> triangleType) {
+        Triangle minPerimeterTriangle = triangleType.get(0);
+        double minPerimeter = triangleType.get(0).getArea();
+        for (int i = 0; i < triangleType.size(); i++) {
+            if(minPerimeter > triangleType.get(i).getArea()) {
+                minPerimeter = triangleType.get(i).getArea();
+                minPerimeterTriangle = triangleType.get(i);
             }
         }
         System.out.println("The smallest perimeter: " + minPerimeter + " of the " + minPerimeterTriangle);
+    }
+
+    public static void infoTriangle(ArrayList<Triangle> triangleType) {
+        getMaxArea(triangleType);
+        getMinArea(triangleType);
+        getMaxPerimeter(triangleType);
+        getMaxPerimeter(triangleType);
+        System.out.println();
     }
 }

@@ -1,10 +1,12 @@
 package Malisheuski8group;
 
+import java.util.ArrayList;
+
 public class Triangle {
 
-    private Dot A;
-    private Dot B;
-    private Dot C;
+    private final Dot A;
+    private final Dot B;
+    private final Dot C;
 
     private double AB;
     private double BC;
@@ -37,17 +39,19 @@ public class Triangle {
         return Math.sqrt(p * (p - this.AB) * (p - this.BC) * (p - this.AC));
     }
 
-    public int typeOfTriangle() {
+    public TypeOfTriangles typeOfTriangle() {
         getSides();
-        if (this.AB == this.BC && this.BC == this.AC && this.AC == this.AB)
-            return 1;
+        if (this.AB == this.BC && this.BC == this.AC && this.AC == this.AB) {
+
+            return TypeOfTriangles.EQUILATERAL;
+        }
         if ((this.AB == this.AC && this.AB != this.BC) || (this.AB == this.BC && this.AB != this.AC))
-            return 2;
+            return TypeOfTriangles.ISOSCELES;
         if (this.AB == Math.sqrt(Math.pow(this.BC, 2) + Math.pow(this.AC, 2))
                  || this.BC == Math.sqrt(Math.pow(this.AB, 2) + Math.pow(this.AC, 2))
                  || this.AC == Math.sqrt(Math.pow(this.AB, 2) + Math.pow(this.BC, 2)))
-            return 3;
-        else return 4;
+            return TypeOfTriangles.RECTANGULAR;
+        else return TypeOfTriangles.ARBITRARY;
     }
 
     @Override
